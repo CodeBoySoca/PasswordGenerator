@@ -1,7 +1,7 @@
 from bottle import run, route, template, static_file, BaseTemplate
 import bottle
 import secrets
-import Enum
+from enum import Enum
 import string
 
 app = bottle.default_app()
@@ -14,6 +14,15 @@ def send_css(filename):
 @route('/static/js/<filename:re:.*\.js')
 def send_js(filename):
     return static_file(filename, root='static/js')
+
+@route('/static/fonts/<filename:re:.*\.ttc>')
+def send_ttc_font(filename):
+    return static_file(filename, root='static/fonts')
+
+@route('/static/fonts/<filename:re:.*\.otf>')
+def send_otf_font(filename):
+    return static_file(filename, root='static/fonts')
+
 
 class CharacterType(Enum):
     ALPHANUMERIC = ''.join(string.ascii_letters + string.digits)
