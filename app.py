@@ -1,17 +1,23 @@
-from bottle import run, route, template, static_file, BaseTemplate
+from bottle import run, post, request, route, abort,  template, static_file, BaseTemplate
 import bottle
 import secrets
 from enum import Enum
 import string
-
+from gevent.pywsgi import WSGIServer
+from geventwebsocket import WebSocketError
+from geventwebsocket.handler import WebSocketHandler
+from typing import List
 app = bottle.default_app()
 BaseTemplate.defaults['get_url'] = app.get_url
+
+server = WSGIServer(("0.0.0.0", 9988), app)
+
 
 @route('/static/css/<filename:re:.*\.css>')
 def send_css(filename):
     return static_file(filename, root='static/css')
 
-@route('/static/js/<filename:re:.*\.js')
+@route('/static/js/<filename:re:.*\.js>')
 def send_js(filename):
     return static_file(filename, root='static/js')
 
@@ -38,4 +44,13 @@ class PasswordGenerator:
 def index():
     return template('index.tpl')
 
-app.run(host='localhost', port=9988)
+@post('/send')
+def send_password():
+    data = request.forms
+    data_items = list(data.values())
+   #list(data)[0]
+    print(data[0])
+
+
+server.serve_forever()
+

@@ -1,0 +1,7 @@
+bottle==0.12.25
+bottle-websocket==0.2.9
+gevent==22.10.2
+gevent-websocket==0.10.1
+greenlet==2.0.2
+zope.event==4.6
+zope.interface==6.0
